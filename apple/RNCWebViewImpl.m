@@ -23,15 +23,15 @@ static NSString *const MessageHandlerName = @"ReactNativeWebView";
 static NSURLCredential* clientAuthenticationCredential;
 static NSDictionary* customCertificatesForHost;
 
-NSString *const CUSTOM_SELECTOR = @"_CUSTOM_SELECTOR_";
+NSString *const CUSTOM_SELECTOR_PATCH = @"_CUSTOM_SELECTOR_";
 
 #if TARGET_OS_IOS
 // runtime trick to remove WKWebView keyboard default toolbar
 // see: http://stackoverflow.com/questions/19033292/ios-7-uiwebview-keyboard-issue/19042279#19042279
-@interface _SwizzleHelperWK : UIView
+@interface _SwizzleHelperWKPatch : UIView
 @property (nonatomic, copy) WKWebView *webView;
 @end
-@implementation _SwizzleHelperWK
+@implementation _SwizzleHelperWKPatch
 -(id)inputAccessoryView
 {
   if (_webView == nil) {
@@ -271,7 +271,7 @@ RCTAutoInsetsProtocol>
       for(NSDictionary *menuItem in self.menuItems) {
         NSString *menuItemLabel = [RCTConvert NSString:menuItem[@"label"]];
         NSString *menuItemKey = [RCTConvert NSString:menuItem[@"key"]];
-        NSString *sel = [NSString stringWithFormat:@"%@%@", CUSTOM_SELECTOR, menuItemKey];
+        NSString *sel = [NSString stringWithFormat:@"%@%@", CUSTOM_SELECTOR_PATCH, menuItemKey];
         UIMenuItem *item = [[UIMenuItem alloc] initWithTitle: menuItemLabel
                                                       action: NSSelectorFromString(sel)];
         [menuControllerItems addObject: item];
@@ -287,7 +287,7 @@ RCTAutoInsetsProtocol>
   for(NSDictionary *menuItem in self.menuItems) {
     NSString *menuItemLabel = [RCTConvert NSString:menuItem[@"label"]];
     NSString *menuItemKey = [RCTConvert NSString:menuItem[@"key"]];
-    NSString *sel = [NSString stringWithFormat:@"%@%@", CUSTOM_SELECTOR, menuItemKey];
+    NSString *sel = [NSString stringWithFormat:@"%@%@", CUSTOM_SELECTOR_PATCH, menuItemKey];
     UICommand *command = [UICommand commandWithTitle:menuItemLabel
                                                image:nil
                                               action:NSSelectorFromString(sel)
@@ -348,7 +348,7 @@ RCTAutoInsetsProtocol>
 - (void)forwardInvocation:(NSInvocation *)invocation
 {
   NSString *sel = NSStringFromSelector([invocation selector]);
-  NSRange match = [sel rangeOfString:CUSTOM_SELECTOR];
+  NSRange match = [sel rangeOfString:CUSTOM_SELECTOR_PATCH];
   if (match.location == 0) {
     [self tappedMenuItem:[sel substringFromIndex:17]];
   } else {
@@ -367,7 +367,7 @@ RCTAutoInsetsProtocol>
 {
   NSString *sel = NSStringFromSelector(action);
   // Do any of them have our custom keys?
-  NSRange match = [sel rangeOfString:CUSTOM_SELECTOR];
+  NSRange match = [sel rangeOfString:CUSTOM_SELECTOR_PATCH];
 
   if (match.location == 0) {
     return YES;
@@ -479,7 +479,7 @@ RCTAutoInsetsProtocol>
 #endif
 
   // Shim the HTML5 history API:
-  [wkWebViewConfig.userContentController addScriptMessageHandler:[[RNCWeakScriptMessageDelegate alloc] initWithDelegate:self]
+  [wkWebViewConfig.userContentController addScriptMessageHandler:[[RNCWeakScriptMessageDelegatePatch alloc] initWithDelegate:self]
                                                             name:HistoryShimName];
   [self resetupScripts:wkWebViewConfig];
 
@@ -972,7 +972,7 @@ RCTAutoInsetsProtocol>
 
   if(subview == nil) return;
 
-  NSString* name = [NSString stringWithFormat:@"%@_SwizzleHelperWK", subview.class.superclass];
+  NSString* name = [NSString stringWithFormat:@"%@_SwizzleHelperWKPatch", subview.class.superclass];
   Class newClass = NSClassFromString(name);
 
   if(newClass == nil)
@@ -980,7 +980,7 @@ RCTAutoInsetsProtocol>
     newClass = objc_allocateClassPair(subview.class, [name cStringUsingEncoding:NSASCIIStringEncoding], 0);
     if(!newClass) return;
 
-    Method method = class_getInstanceMethod([_SwizzleHelperWK class], @selector(inputAccessoryView));
+    Method method = class_getInstanceMethod([_SwizzleHelperWKPatch class], @selector(inputAccessoryView));
     class_addMethod(newClass, @selector(inputAccessoryView), method_getImplementation(method), method_getTypeEncoding(method));
 
     objc_registerClassPair(newClass);
@@ -994,7 +994,7 @@ RCTAutoInsetsProtocol>
   UIView* subview;
 
   for (UIView* view in _webView.scrollView.subviews) {
-    if([[view.class description] hasSuffix:@"_SwizzleHelperWK"])
+    if([[view.class description] hasSuffix:@"_SwizzleHelperWKPatch"])
       subview = view;
   }
 
@@ -1802,7 +1802,7 @@ didFinishNavigation:(WKNavigation *)navigation
   [wkWebViewConfig.userContentController removeScriptMessageHandlerForName:MessageHandlerName];
   if(self.enableApplePay){
     if (self.postMessageScript){
-      [wkWebViewConfig.userContentController addScriptMessageHandler:[[RNCWeakScriptMessageDelegate alloc] initWithDelegate:self]
+      [wkWebViewConfig.userContentController addScriptMessageHandler:[[RNCWeakScriptMessageDelegatePatch alloc] initWithDelegate:self]
                                                                 name:MessageHandlerName];
     }
     return;
@@ -1895,7 +1895,7 @@ didFinishNavigation:(WKNavigation *)navigation
 
   if(_messagingEnabled){
     if (self.postMessageScript){
-      [wkWebViewConfig.userContentController addScriptMessageHandler:[[RNCWeakScriptMessageDelegate alloc] initWithDelegate:self]
+      [wkWebViewConfig.userContentController addScriptMessageHandler:[[RNCWeakScriptMessageDelegatePatch alloc] initWithDelegate:self]
                                                                 name:MessageHandlerName];
       [wkWebViewConfig.userContentController addUserScript:self.postMessageScript];
     }
@@ -1934,7 +1934,7 @@ didFinishNavigation:(WKNavigation *)navigation
 
 @end
 
-@implementation RNCWeakScriptMessageDelegate
+@implementation RNCWeakScriptMessageDelegatePatch
 
 - (instancetype)initWithDelegate:(id<WKScriptMessageHandler>)scriptDelegate {
   self = [super init];

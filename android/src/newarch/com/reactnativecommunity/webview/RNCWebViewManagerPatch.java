@@ -33,13 +33,13 @@ import org.json.JSONObject;
 import java.util.Map;
 
 @ReactModule(name = RNCWebViewManagerImpl.NAME)
-public class RNCWebViewManager extends ViewGroupManager<RNCWebViewWrapper>
+public class RNCWebViewManagerPatch extends ViewGroupManager<RNCWebViewWrapper>
         implements RNCWebViewManagerInterface<RNCWebViewWrapper> {
 
     private final ViewManagerDelegate<RNCWebViewWrapper> mDelegate;
     private final RNCWebViewManagerImpl mRNCWebViewManagerImpl;
 
-    public RNCWebViewManager() {
+    public RNCWebViewManagerPatch() {
         mDelegate = new RNCWebViewManagerDelegate<>(this);
         mRNCWebViewManagerImpl = new RNCWebViewManagerImpl();
     }

@@ -1,6 +1,6 @@
 #import <React/RCTUIManager.h>
 
-#import "RNCWebViewManager.h"
+#import "RNCWebViewManagerPatch.h"
 #import "RNCWebViewImpl.h"
 #import "RNCWebViewDecisionManager.h"
 #ifdef RCT_NEW_ARCH_ENABLED
@@ -36,7 +36,7 @@ RCT_ENUM_CONVERTER(RNCWebViewPermissionGrantType, (@{
 @end
 
 
-@implementation RNCWebViewManager {
+@implementation RNCWebViewManagerPatch {
     NSConditionLock *_shouldStartLoadLock;
     BOOL _shouldStartLoad;
 }

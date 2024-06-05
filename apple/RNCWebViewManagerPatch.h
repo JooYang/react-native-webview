@@ -3,7 +3,7 @@
 
 #import <React/RCTViewManager.h>
 
-@interface RNCWebViewManager : RCTViewManager
+@interface RNCWebViewManagerPatch : RCTViewManager
 @end
 
-#endif /* RNCWebViewManager_h */
+#endif /* RNCWebViewManagerPatch_h */
