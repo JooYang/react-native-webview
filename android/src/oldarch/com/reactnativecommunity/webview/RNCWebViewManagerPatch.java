@@ -41,7 +41,7 @@ public class RNCWebViewManagerPatch extends ViewGroupManager<RNCWebViewWrapper> 
         return mRNCWebViewManagerImpl.createViewInstance(context);
     }
 
-    public RNCWebViewWrapper createViewInstance(ThemedReactContext context, RNCWebView view) {
+    public RNCWebViewWrapper createViewInstance(ThemedReactContext context, RNCWebViewPatch view) {
       return mRNCWebViewManagerImpl.createViewInstance(context, view);
     }
 

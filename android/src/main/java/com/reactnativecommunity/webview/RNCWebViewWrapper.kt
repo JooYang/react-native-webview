@@ -7,12 +7,12 @@ import android.webkit.WebView
 import android.widget.FrameLayout
 
 /**
- * A [FrameLayout] container to hold the [RNCWebView].
+ * A [FrameLayout] container to hold the [RNCWebViewPatch].
  * We need this to prevent WebView crash when the WebView is out of viewport and
  * [com.facebook.react.views.view.ReactViewGroup] clips the canvas.
  * The WebView will then create an empty offscreen surface and NPE.
  */
-class RNCWebViewWrapper(context: Context, webView: RNCWebView) : FrameLayout(context) {
+class RNCWebViewWrapper(context: Context, webView: RNCWebViewPatch) : FrameLayout(context) {
   init {
     // We make the WebView as transparent on top of the container,
     // and let React Native sets background color for the container.
@@ -20,7 +20,7 @@ class RNCWebViewWrapper(context: Context, webView: RNCWebView) : FrameLayout(con
     addView(webView)
   }
 
-  val webView: RNCWebView = getChildAt(0) as RNCWebView
+  val webView: RNCWebViewPatch = getChildAt(0) as RNCWebViewPatch
 
   companion object {
     /**

@@ -1,14 +1,17 @@
+import invariant from 'invariant';
 import React, {
   forwardRef,
   useCallback,
   useImperativeHandle,
   useRef,
 } from 'react';
-import { Image, View, ImageSourcePropType, HostComponent } from 'react-native';
-import invariant from 'invariant';
+import { HostComponent, Image, ImageSourcePropType, View } from 'react-native';
 
-import RNCWebView, { Commands, NativeProps } from './RNCWebViewNativeComponent';
 import RNCWebViewModule from './NativeRNCWebView';
+import RNCWebViewPatch, {
+  Commands,
+  NativeProps,
+} from './RNCWebViewNativeComponent';
 
 import {
   defaultOriginWhitelist,
@@ -17,8 +20,8 @@ import {
   useWebViewLogic,
 } from './WebViewShared';
 import {
-  IOSWebViewProps,
   DecelerationRateConstant,
+  IOSWebViewProps,
   WebViewSourceUri,
 } from './WebViewTypes';
 
@@ -188,7 +191,7 @@ const WebViewComponent = forwardRef<{}, IOSWebViewProps>(
         lastErrorEvent?.description ?? ''
       );
     } else if (viewState !== 'IDLE') {
-      console.error(`RNCWebView invalid state encountered: ${viewState}`);
+      console.error(`RNCWebViewPatch invalid state encountered: ${viewState}`);
     }
 
     const webViewStyles = [styles.container, styles.webView, style];
@@ -197,7 +200,8 @@ const WebViewComponent = forwardRef<{}, IOSWebViewProps>(
     const decelerationRate = processDecelerationRate(decelerationRateProp);
 
     const NativeWebView =
-      (nativeConfig?.component as typeof RNCWebView | undefined) || RNCWebView;
+      (nativeConfig?.component as typeof RNCWebViewPatch | undefined) ||
+      RNCWebViewPatch;
 
     const sourceResolved = resolveAssetSource(source as ImageSourcePropType);
     const newSource =

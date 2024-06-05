@@ -17,7 +17,7 @@
 
 NS_ASSUME_NONNULL_BEGIN
 
-@interface RNCWebView : RCTViewComponentView
+@interface RNCWebViewPatch : RCTViewComponentView
 @end
 
 namespace facebook {

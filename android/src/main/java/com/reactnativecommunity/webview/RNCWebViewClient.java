@@ -39,7 +39,7 @@ public class RNCWebViewClient extends WebViewClient {
     protected static final int SHOULD_OVERRIDE_URL_LOADING_TIMEOUT = 250;
 
     protected boolean mLastLoadFailed = false;
-    protected RNCWebView.ProgressChangedFilter progressChangedFilter = null;
+    protected RNCWebViewPatch.ProgressChangedFilter progressChangedFilter = null;
     protected @Nullable String ignoreErrFailedForThisURL = null;
     protected @Nullable RNCBasicAuthCredential basicAuthCredential = null;
 
@@ -56,7 +56,7 @@ public class RNCWebViewClient extends WebViewClient {
         super.onPageFinished(webView, url);
 
         if (!mLastLoadFailed) {
-            RNCWebView reactWebView = (RNCWebView) webView;
+            RNCWebViewPatch reactWebView = (RNCWebViewPatch) webView;
 
             reactWebView.callInjectedJavaScript();
 
@@ -68,7 +68,7 @@ public class RNCWebViewClient extends WebViewClient {
     public void doUpdateVisitedHistory (WebView webView, String url, boolean isReload) {
       super.doUpdateVisitedHistory(webView, url, isReload);
 
-      ((RNCWebView) webView).dispatchEvent(
+      ((RNCWebViewPatch) webView).dispatchEvent(
         webView,
         new TopLoadingStartEvent(
           RNCWebViewWrapper.getReactTagFromWebView(webView),
@@ -80,23 +80,23 @@ public class RNCWebViewClient extends WebViewClient {
       super.onPageStarted(webView, url, favicon);
       mLastLoadFailed = false;
 
-      RNCWebView reactWebView = (RNCWebView) webView;
+      RNCWebViewPatch reactWebView = (RNCWebViewPatch) webView;
       reactWebView.callInjectedJavaScriptBeforeContentLoaded();
     }
 
     @Override
     public boolean shouldOverrideUrlLoading(WebView view, String url) {
-        final RNCWebView rncWebView = (RNCWebView) view;
-        final boolean isJsDebugging = rncWebView.getReactApplicationContext().getJavaScriptContextHolder().get() == 0;
+        final RNCWebViewPatch RNCWebViewPatch = (RNCWebViewPatch) view;
+        final boolean isJsDebugging = RNCWebViewPatch.getReactApplicationContext().getJavaScriptContextHolder().get() == 0;
 
-        if (!isJsDebugging && rncWebView.mMessagingJSModule != null) {
+        if (!isJsDebugging && RNCWebViewPatch.mMessagingJSModule != null) {
             final Pair<Double, AtomicReference<RNCWebViewModuleImpl.ShouldOverrideUrlLoadingLock.ShouldOverrideCallbackState>> lock = RNCWebViewModuleImpl.shouldOverrideUrlLoadingLock.getNewLock();
             final double lockIdentifier = lock.first;
             final AtomicReference<RNCWebViewModuleImpl.ShouldOverrideUrlLoadingLock.ShouldOverrideCallbackState> lockObject = lock.second;
 
             final WritableMap event = createWebViewEvent(view, url);
             event.putDouble("lockIdentifier", lockIdentifier);
-            rncWebView.dispatchDirectShouldStartLoadWithRequest(event);
+            RNCWebViewPatch.dispatchDirectShouldStartLoadWithRequest(event);
 
             try {
                 assert lockObject != null;
@@ -312,7 +312,7 @@ public class RNCWebViewClient extends WebViewClient {
         return event;
     }
 
-    public void setProgressChangedFilter(RNCWebView.ProgressChangedFilter filter) {
+    public void setProgressChangedFilter(RNCWebViewPatch.ProgressChangedFilter filter) {
         progressChangedFilter = filter;
     }
 }

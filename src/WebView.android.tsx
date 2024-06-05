@@ -7,15 +7,18 @@ import React, {
   useRef,
 } from 'react';
 
-import { Image, View, ImageSourcePropType, HostComponent } from 'react-native';
+import { HostComponent, Image, ImageSourcePropType, View } from 'react-native';
 
 import BatchedBridge from 'react-native/Libraries/BatchedBridge/BatchedBridge';
 import EventEmitter from 'react-native/Libraries/vendor/emitter/EventEmitter';
 
 import invariant from 'invariant';
 
-import RNCWebView, { Commands, NativeProps } from './RNCWebViewNativeComponent';
 import RNCWebViewModule from './NativeRNCWebView';
+import RNCWebViewPatch, {
+  Commands,
+  NativeProps,
+} from './RNCWebViewNativeComponent';
 import {
   defaultOriginWhitelist,
   defaultRenderError,
@@ -25,8 +28,8 @@ import {
 import {
   AndroidWebViewProps,
   WebViewSourceUri,
-  type WebViewMessageEvent,
   type ShouldStartLoadRequestEvent,
+  type WebViewMessageEvent,
 } from './WebViewTypes';
 
 import styles from './WebView.styles';
@@ -233,7 +236,7 @@ const WebViewComponent = forwardRef<{}, AndroidWebViewProps>(
         );
       }
     } else if (viewState !== 'IDLE') {
-      console.error(`RNCWebView invalid state encountered: ${viewState}`);
+      console.error(`RNCWebViewPatch invalid state encountered: ${viewState}`);
     }
 
     const webViewStyles = [styles.container, styles.webView, style];
@@ -250,7 +253,8 @@ const WebViewComponent = forwardRef<{}, AndroidWebViewProps>(
     }
 
     const NativeWebView =
-      (nativeConfig?.component as typeof RNCWebView | undefined) || RNCWebView;
+      (nativeConfig?.component as typeof RNCWebViewPatch | undefined) ||
+      RNCWebViewPatch;
 
     const sourceResolved = resolveAssetSource(source as ImageSourcePropType);
     const newSource =

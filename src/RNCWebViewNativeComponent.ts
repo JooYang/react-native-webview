@@ -1,5 +1,4 @@
 import type { HostComponent, ViewProps } from 'react-native';
-import codegenNativeComponent from 'react-native/Libraries/Utilities/codegenNativeComponent';
 import {
   DirectEventHandler,
   Double,
@@ -7,6 +6,7 @@ import {
   WithDefault,
 } from 'react-native/Libraries/Types/CodegenTypes';
 import codegenNativeCommands from 'react-native/Libraries/Utilities/codegenNativeCommands';
+import codegenNativeComponent from 'react-native/Libraries/Utilities/codegenNativeComponent';
 
 export type WebViewNativeEvent = Readonly<{
   url: string;
@@ -336,5 +336,5 @@ export const Commands = codegenNativeCommands<NativeCommands>({
 });
 
 export default codegenNativeComponent<NativeProps>(
-  'RNCWebView'
+  'RNCWebViewPatch'
 ) as HostComponent<NativeProps>;

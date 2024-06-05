@@ -1,6 +1,6 @@
 // This guard prevent the code from being compiled in the old architecture
 #ifdef RCT_NEW_ARCH_ENABLED
-#import "RNCWebView.h"
+#import "RNCWebViewPatch.h"
 #import "RNCWebViewImpl.h"
 
 #import <react/renderer/components/RNCWebViewSpec/ComponentDescriptors.h>
@@ -39,11 +39,11 @@ auto stringToOnLoadingFinishNavigationTypeEnum(std::string value) {
     return RNCWebViewEventEmitter::OnLoadingFinishNavigationType::Other;
 }
 
-@interface RNCWebView () <RCTRNCWebViewViewProtocol>
+@interface RNCWebViewPatch () <RCTRNCWebViewViewProtocol>
 
 @end
 
-@implementation RNCWebView {
+@implementation RNCWebViewPatch {
     RNCWebViewImpl * _view;
 }
 
@@ -487,7 +487,7 @@ auto stringToOnLoadingFinishNavigationTypeEnum(std::string value) {
 
 Class<RCTComponentViewProtocol> RNCWebViewCls(void)
 {
-    return RNCWebView.class;
+    return RNCWebViewPatch.class;
 }
 
 - (void)goBack {

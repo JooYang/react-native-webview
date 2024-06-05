@@ -41,7 +41,7 @@ RCT_ENUM_CONVERTER(RNCWebViewPermissionGrantType, (@{
     BOOL _shouldStartLoad;
 }
 
-RCT_EXPORT_MODULE(RNCWebView)
+RCT_EXPORT_MODULE(RNCWebViewPatch)
 
 - (RNCView *)view
 {
@@ -187,7 +187,7 @@ RCT_EXPORT_METHOD(name:(nonnull NSNumber *)reactTag)                            
 [self.bridge.uiManager addUIBlock:^(__unused RCTUIManager *uiManager, NSDictionary<NSNumber *, BASE_VIEW_PER_OS() *> *viewRegistry) {   \
     RNCWebViewImpl *view = (RNCWebViewImpl *)viewRegistry[reactTag];                                                                    \
     if (![view isKindOfClass:[RNCWebViewImpl class]]) {                                                                                 \
-      RCTLogError(@"Invalid view returned from registry, expecting RNCWebView, got: %@", view);                                         \
+      RCTLogError(@"Invalid view returned from registry, expecting RNCWebViewPatch, got: %@", view);                                         \
     } else {                                                                                                                            \
       [view name];                                                                                                                      \
     }                                                                                                                                   \
@@ -199,7 +199,7 @@ RCT_EXPORT_METHOD(name:(nonnull NSNumber *)reactTag in_param)                   
 [self.bridge.uiManager addUIBlock:^(__unused RCTUIManager *uiManager, NSDictionary<NSNumber *, BASE_VIEW_PER_OS() *> *viewRegistry) {   \
     RNCWebViewImpl *view = (RNCWebViewImpl *)viewRegistry[reactTag];                                                                    \
     if (![view isKindOfClass:[RNCWebViewImpl class]]) {                                                                                 \
-      RCTLogError(@"Invalid view returned from registry, expecting RNCWebView, got: %@", view);                                         \
+      RCTLogError(@"Invalid view returned from registry, expecting RNCWebViewPatch, got: %@", view);                                         \
     } else {                                                                                                                            \
       [view name:out_param];                                                                                                            \
     }                                                                                                                                   \

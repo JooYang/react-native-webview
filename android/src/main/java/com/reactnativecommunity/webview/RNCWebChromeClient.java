@@ -50,7 +50,7 @@ public class RNCWebChromeClient extends WebChromeClient implements LifecycleEven
 
     protected static final int COMMON_PERMISSION_REQUEST = 3;
 
-    protected RNCWebView mWebView;
+    protected RNCWebViewPatch mWebView;
 
     protected View mVideoView;
     protected WebChromeClient.CustomViewCallback mCustomViewCallback;
@@ -76,12 +76,12 @@ public class RNCWebChromeClient extends WebChromeClient implements LifecycleEven
     // Pending Android permissions for the next request
     protected List<String> pendingPermissions = new ArrayList<>();
 
-    protected RNCWebView.ProgressChangedFilter progressChangedFilter = null;
+    protected RNCWebViewPatch.ProgressChangedFilter progressChangedFilter = null;
     protected boolean mAllowsProtectedMedia = false;
 
     protected boolean mHasOnOpenWindowEvent = false;
 
-    public RNCWebChromeClient(RNCWebView webView) {
+    public RNCWebChromeClient(RNCWebViewPatch webView) {
         this.mWebView = webView;
     }
 
@@ -97,7 +97,7 @@ public class RNCWebChromeClient extends WebChromeClient implements LifecycleEven
                 WritableMap event = Arguments.createMap();
                 event.putString("targetUrl", url);
 
-                ((RNCWebView) view).dispatchEvent(
+                ((RNCWebViewPatch) view).dispatchEvent(
                     view,
                     new TopOpenWindowEvent(RNCWebViewWrapper.getReactTagFromWebView(view), event)
                 );
@@ -353,7 +353,7 @@ public class RNCWebChromeClient extends WebChromeClient implements LifecycleEven
         return this.mWebView.getThemedReactContext().getCurrentActivity().findViewById(android.R.id.content);
     }
 
-    public void setProgressChangedFilter(RNCWebView.ProgressChangedFilter filter) {
+    public void setProgressChangedFilter(RNCWebViewPatch.ProgressChangedFilter filter) {
         progressChangedFilter = filter;
     }
 

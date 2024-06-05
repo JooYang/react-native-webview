@@ -33,7 +33,7 @@ val invalidCharRegex = "[\\\\/%\"]".toRegex()
 
 class RNCWebViewManagerImpl {
     companion object {
-        const val NAME = "RNCWebView"
+        const val NAME = "RNCWebViewPatch"
     }
 
     private val TAG = "RNCWebViewManagerImpl"
@@ -58,8 +58,8 @@ class RNCWebViewManagerImpl {
     private val DEFAULT_LACK_PERMISSION_TO_DOWNLOAD_MESSAGE =
         "Cannot download files as permission was denied. Please provide permission to write to storage, in order to download files."
 
-    fun createRNCWebViewInstance(context: ThemedReactContext): RNCWebView {
-        return RNCWebView(context)
+    fun createRNCWebViewInstance(context: ThemedReactContext): RNCWebViewPatch {
+        return RNCWebViewPatch(context)
     }
 
     fun createViewInstance(context: ThemedReactContext): RNCWebViewWrapper {
@@ -67,7 +67,7 @@ class RNCWebViewManagerImpl {
       return createViewInstance(context, webView);
     }
 
-    fun createViewInstance(context: ThemedReactContext, webView: RNCWebView): RNCWebViewWrapper {
+    fun createViewInstance(context: ThemedReactContext, webView: RNCWebViewPatch): RNCWebViewWrapper {
         setupWebChromeClient(webView)
         context.addLifecycleEventListener(webView)
         mWebViewConfig.configWebView(webView)
@@ -139,7 +139,7 @@ class RNCWebViewManagerImpl {
     }
 
     private fun setupWebChromeClient(
-        webView: RNCWebView,
+        webView: RNCWebViewPatch,
     ) {
         val activity = webView.themedReactContext.currentActivity
         if (mAllowsFullscreenVideo && activity != null) {
@@ -703,6 +703,6 @@ class RNCWebViewManagerImpl {
     }
 
     fun setWebviewDebuggingEnabled(viewWrapper: RNCWebViewWrapper, enabled: Boolean) {
-        RNCWebView.setWebContentsDebuggingEnabled(enabled)
+        RNCWebViewPatch.setWebContentsDebuggingEnabled(enabled)
     }
 }

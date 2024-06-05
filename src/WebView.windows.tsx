@@ -10,21 +10,21 @@
  * Licensed under the MIT License.
  */
 
+import invariant from 'invariant';
 import React, {
   forwardRef,
   useCallback,
   useImperativeHandle,
   useRef,
 } from 'react';
-import { View, Image, ImageSourcePropType, NativeModules } from 'react-native';
+import { Image, ImageSourcePropType, NativeModules, View } from 'react-native';
 import codegenNativeCommands from 'react-native/Libraries/Utilities/codegenNativeCommands';
-import invariant from 'invariant';
 import { RCTWebView, RCTWebView2 } from './WebViewNativeComponent.windows';
 import {
-  useWebViewLogic,
   defaultOriginWhitelist,
   defaultRenderError,
   defaultRenderLoading,
+  useWebViewLogic,
 } from './WebViewShared';
 import { NativeWebViewWindows, WindowsWebViewProps } from './WebViewTypes';
 
@@ -161,7 +161,7 @@ const WebViewComponent = forwardRef<{}, WindowsWebViewProps>(
         lastErrorEvent.description
       );
     } else if (viewState !== 'IDLE') {
-      console.error(`RNCWebView invalid state encountered: ${viewState}`);
+      console.error(`RNCWebViewPatch invalid state encountered: ${viewState}`);
     }
 
     const webViewStyles = [styles.container, styles.webView, style];
