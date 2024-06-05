@@ -815,12 +815,24 @@ RCTAutoInsetsProtocol>
   // Check for a static html source first
   NSString *html = [RCTConvert NSString:_source[@"html"]];
   if (html) {
-    NSURL *baseURL = [RCTConvert NSURL:_source[@"baseUrl"]];
-    if (!baseURL) {
-      baseURL = [NSURL URLWithString:@"about:blank"];
-    }
-    [_webView loadHTMLString:html baseURL:baseURL];
-    return;
+      NSURL *blank = [NSURL URLWithString:@"about:blank"];
+      // 네이티브 iOS 와 동일하게, loadHTMLString 전에 about:blank 페이지를 열어줍니다
+      [_webView loadRequest:[NSURLRequest requestWithURL:blank]];
+
+      NSURL *baseURL = [RCTConvert NSURL:_source[@"baseUrl"]];
+      if (!baseURL) {
+          baseURL = [NSURL URLWithString:@"about:blank"];
+      }
+      // about:blank 페이지가 열렸다면, loadHTMLString 을 호출합니다
+      // 네이티브 iOS 와 동일하게 async 작업으로 처리해줍니다
+      __weak typeof(self) weakSelf = self;
+      dispatch_async(dispatch_get_main_queue(), ^{
+          __strong typeof(weakSelf) strongSelf = weakSelf;
+          if (strongSelf) {
+              [strongSelf->_webView loadHTMLString:html baseURL:baseURL];
+          }
+      });
+      return;
   }
   // Add cookie for subsequent resource requests sent by page itself, if cookie was set in headers on WebView
   NSString *headerCookie = [RCTConvert NSString:_source[@"headers"][@"cookie"]];
