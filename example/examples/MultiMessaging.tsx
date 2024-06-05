@@ -1,8 +1,8 @@
 /* eslint-disable react-native/no-inline-styles */
 import React from 'react';
-import { View, Alert, TextInput } from 'react-native';
+import { Alert, TextInput, View } from 'react-native';
 
-import WebView from 'react-native-webview';
+import WebView from 'react-native-webview-patch-jooyang';
 
 const HTML = `<!DOCTYPE html>\n
 <html>

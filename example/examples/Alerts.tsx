@@ -1,7 +1,7 @@
-import React, {Component} from 'react';
-import {Text, View} from 'react-native';
+import React, { Component } from 'react';
+import { View } from 'react-native';
 
-import WebView from 'react-native-webview';
+import WebView from 'react-native-webview-patch-jooyang';
 
 const HTML = `
 <!DOCTYPE html>\n
@@ -63,7 +63,7 @@ export default class Alerts extends Component<Props, State> {
     return (
       <View style={{ height: 120 }}>
         <WebView
-          source={{html: HTML}}
+          source={{ html: HTML }}
           automaticallyAdjustContentInsets={false}
         />
       </View>
