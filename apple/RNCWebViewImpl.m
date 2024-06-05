@@ -8,7 +8,7 @@
 #import "RNCWebViewImpl.h"
 #import <React/RCTConvert.h>
 #import <React/RCTAutoInsetsProtocol.h>
-#import "RNCWKProcessPoolManager.h"
+#import "RNCWKProcessPoolManagerPatch.h"
 #if !TARGET_OS_OSX
 #import <UIKit/UIKit.h>
 #else
@@ -456,7 +456,7 @@ RCTAutoInsetsProtocol>
     wkWebViewConfig.websiteDataStore = [WKWebsiteDataStore defaultDataStore];
   }
   if(self.useSharedProcessPool) {
-    wkWebViewConfig.processPool = [[RNCWKProcessPoolManager sharedManager] sharedProcessPool];
+    wkWebViewConfig.processPool = [[RNCWKProcessPoolManagerPatch sharedManager] sharedProcessPool];
   }
   wkWebViewConfig.userContentController = [WKUserContentController new];
 
